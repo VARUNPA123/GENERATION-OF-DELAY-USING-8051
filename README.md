@@ -1,35 +1,32 @@
-# FIBONACCI SERIES USING 8086 MICROPROCESSOR
+# GENERATION OF 100 MS DELAY USING 8051
 
 ## AIM
-To write an assembly language program in 8086 to generate the Fibonacci Series up to N terms and store the sequence in memory.
+To write an assembly language program in 8051 to generate a 100 ms delay using Timer 1 in Mode 2 and toggle Port 2.5 continuously.
 
 ## APPARATUS REQUIRED
 
-
 1. Personal Computer
-2. MASM Software
-
-## PROBLEM ANALYSIS
-The first and second term of the Fibonacci series are 00 and 01. The third element is given by the sum of the first and second element. The fourth element is given by sum of second and third element, and so on. In general, an element of fibonacci series is given by sum of immediate two previous element.
+2. Keil Software
 
 ## ALGORITHM
-1. Set SI-register as pointer for Fibonacci series.
-2. Set CL-register as count for number of elements to be generated.
-3. Increment the pointer (SI).
-4. Initialize the first element of Fibonacci series as 00H in AL-register.
-5. Store first element in memory.
-6. Increment the pointer (SI).
-7. Increment AL to get second element (01H) of Fibonacci series in AL-register.
-8. Store the second element in memory.
-9. Decrement the count (CL-register) by 02.
-10. Decrement the pointer (SI).
-11. Get the element prior to last generated element in AL.
-12. Get the last generated element in BL.
-13. Add the previous two elements (AL and BL) to get the next element in AL.
-14. Increment the pointer.
-15. Store the next element (AL) of the Fibonacci series in memory.
-16. Decrement the count (CL).
-17. If the content of CL is not zero then go to step 10, otherwise stop.
+1. Start the program.
+2. Initialize Timer 1 in Mode 2 (8‑bit auto‑reload) by loading TMOD ← 20H.
+3. Load TH1 with 00H (reload value for Timer 1).
+4. Enter the main loop (HERE):
+       - Load register R6 ← 2 (outer loop counter).
+5. Outer loop (OUTER):
+       - Load register R5 ← 196 (inner loop counter).
+6. Inner loop (INNER):
+       - Start Timer 1 (SETB TR1).
+       - Wait until Timer 1 overflow flag TF1 is set.
+       - Stop Timer 1 (CLR TR1).
+       - Clear overflow flag (CLR TF1).
+       - Decrement R5. If not zero, repeat inner loop.
+7. After inner loop completes:
+       - Toggle bit P2.5 (complement its value).
+       - Decrement R6. If not zero, repeat outer loop.
+8. After outer loop completes:
+       - Jump back to HERE to repeat the entire process continuously.
 
 ## FLOW CHART
 <img width="733" height="581" alt="image" src="https://github.com/user-attachments/assets/8748bff2-c5d6-4c7a-93a2-c946e794a8a0" />
@@ -43,40 +40,24 @@ The first and second term of the Fibonacci series are 00 and 01. The third eleme
 
 ## PROGRAM
 ```asm
-DATA SEGMENT
-    COUNT DB 10
-    SERIES DB 10 DUP(0)
-DATA ENDS
-
-CODE SEGMENT
-    ASSUME CS:CODE, DS:DATA
-START:           
-    MOV AX, DATA
-    MOV DS, AX
-    LEA SI, SERIES
-    MOV CL, [COUNT]
-    MOV AL, 00H
-    MOV [SI], AL
-    INC SI
-    INC AL
-    MOV [SI], AL
-    SUB CL, 02H
-    JZ  STOP_PROGRAM
-LOOP_START:
-    DEC SI
-    MOV AL, [SI]
-    INC SI
-    MOV BL, [SI]
-    ADD AL, BL
-    INC SI
-    MOV [SI], AL
-    DEC CL
-    JNZ LOOP_START
-STOP_PROGRAM:
-    MOV AH, 4CH
-    INT 21H
-CODE ENDS
-    END START
+ORG 0000H
+MOV TMOD, #20H
+MOV TH1, #00H
+HERE:
+    MOV R6, #2
+OUTER:
+    MOV R5, #196
+INNER:
+    SETB TR1
+WAIT:
+    JNB TF1, WAIT
+    CLR TR1
+    CLR TF1
+    DJNZ R5, INNER
+    CPL P2.5
+    DJNZ R6, OUTER
+    SJMP HERE
+END
 ```
 
 
@@ -86,16 +67,8 @@ CODE ENDS
 
 ## OUTPUT IMAGE FROM MASM SOFTWARE
 
-<img width="643" height="397" alt="image" src="https://github.com/user-attachments/assets/b4be7f7f-8784-4375-8d5e-c9ccfa68968f" />
+<img width="1918" height="751" alt="image" src="https://github.com/user-attachments/assets/fc670c59-eba4-4781-8e80-2bd861668302" />
 
-
-
-<img width="643" height="222" alt="image" src="https://github.com/user-attachments/assets/a2186cb3-f924-41f5-8dc0-a3d04ded28ad" />
-
-
-
-
-<img width="636" height="395" alt="image" src="https://github.com/user-attachments/assets/25564b43-eff1-498e-a494-24fcd2fd8068" />
 
 ## RESULT
-Thus, the Assembly Language Program for 8086 to generate the Fibonacci Series up to N terms and store the sequence in memory was successfully written and executed using MASM.
+Thus, the Assembly Language Program for 8051 to generate a 100 ms delay using Timer 1 in Mode 2 and continuously toggle Port 2.5 was successfully written, assembled, and executed. The output observed was a continuous square wave on pin P2.5 with a time period of approximately 200 ms (100 ms HIGH and 100 ms LOW).
