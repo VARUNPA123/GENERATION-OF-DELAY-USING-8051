@@ -21,7 +21,7 @@ To write an assembly language program in 8051 to generate a 100 ms delay using T
    - Wait until Timer 1 overflow flag TF1 is set.
    - Stop Timer 1 (CLR TR1).
    - Clear overflow flag (CLR TF1).
-- Decrement R5. If not zero, repeat inner loop.
+   - Decrement R5. If not zero, repeat inner loop.
 7. **After inner loop completes:**
    - Toggle bit P2.5 (complement its value).
    - Decrement R6. If not zero, repeat outer loop.
