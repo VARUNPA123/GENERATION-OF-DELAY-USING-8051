@@ -51,12 +51,7 @@ WAIT:
 END
 ```
 
-
-
-
-
-
-## OUTPUT IMAGE FROM MASM SOFTWARE
+## OUTPUT
 
 <img width="1918" height="751" alt="image" src="https://github.com/user-attachments/assets/fc670c59-eba4-4781-8e80-2bd861668302" />
 
