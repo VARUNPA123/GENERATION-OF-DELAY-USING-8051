@@ -9,34 +9,24 @@ To write an assembly language program in 8051 to generate a 100 ms delay using T
 2. Keil Software
 
 ## ALGORITHM
-1. Start the program.
-2. Initialize Timer 1 in Mode 2 (8‑bit auto‑reload) by loading TMOD ← 20H.
-3. Load TH1 with 00H (reload value for Timer 1).
-4. Enter the main loop (HERE):
+1. **Start the program.**
+2. **Initialize Timer 1 in Mode 2 (8‑bit auto‑reload) by loading TMOD ← 20H.**
+3. **Load TH1 with 00H (reload value for Timer 1).**
+4. **Enter the main loop (HERE):**
        - Load register R6 ← 2 (outer loop counter).
-5. Outer loop (OUTER):
+5. **Outer loop (OUTER):**
        - Load register R5 ← 196 (inner loop counter).
-6. Inner loop (INNER):
+6. **Inner loop (INNER):**
        - Start Timer 1 (SETB TR1).
        - Wait until Timer 1 overflow flag TF1 is set.
        - Stop Timer 1 (CLR TR1).
        - Clear overflow flag (CLR TF1).
        - Decrement R5. If not zero, repeat inner loop.
-7. After inner loop completes:
+7. **After inner loop completes:**
        - Toggle bit P2.5 (complement its value).
        - Decrement R6. If not zero, repeat outer loop.
-8. After outer loop completes:
+8. **After outer loop completes:**
        - Jump back to HERE to repeat the entire process continuously.
-
-## FLOW CHART
-<img width="733" height="581" alt="image" src="https://github.com/user-attachments/assets/8748bff2-c5d6-4c7a-93a2-c946e794a8a0" />
-
-
-
-
-
-
-
 
 ## PROGRAM
 ```asm
