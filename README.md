@@ -10,23 +10,26 @@ To write an assembly language program in 8051 to generate a 100 ms delay using T
 
 ## ALGORITHM
 1. **Start the program.**
-2. **Initialize Timer 1 in Mode 2 (8‑bit auto‑reload) by loading TMOD ← 20H.**
-3. **Load TH1 with 00H (reload value for Timer 1).**
-4. **Enter the main loop (HERE):**
-   - Load register R6 ← 2 (outer loop counter).
-5. **Outer loop (OUTER):**
-   - Load register R5 ← 196 (inner loop counter).
-6. **Inner loop (INNER):**
-   - Start Timer 1 (SETB TR1).
-   - Wait until Timer 1 overflow flag TF1 is set.
-   - Stop Timer 1 (CLR TR1).
-   - Clear overflow flag (CLR TF1).
-   - Decrement R5. If not zero, repeat inner loop.
-7. **After inner loop completes:**
-   - Toggle bit P2.5 (complement its value).
-   - Decrement R6. If not zero, repeat outer loop.
+2. **Initialize Timer:**
+   - Load the Timer Mode register (TMOD) with 20H to select Timer 1 in Mode 2 (8‑bit auto‑reload).
+   - Load the TH1 register with the required reload value (e.g., 00H in your code, or 9CH in the earlier calculation depending on the delay scheme).
+3. **Enter the main loop (HERE):**
+   - Load outer loop counter (R6) with a fixed value (e.g., 02H) to control the number of large delay blocks.
+4. **Outer loop (OUTER):**
+   - Load inner loop counter (R5) with a fixed value (e.g., C4H = 196) to control the number of timer overflows per outer cycle.
+5. **Inner loop (INNER):**
+   - Start Timer 1 by setting the run control bit TR1.
+   - Wait for overflow: Continuously check the overflow flag TF1 until it becomes 1.
+   - Stop Timer 1 by clearing TR1.
+   - Clear the overflow flag TF1 to prepare for the next cycle.
+   - Decrement R5. If R5 ≠ 0, repeat the inner loop.
+6. **After inner loop completes:**
+   - Toggle Port 2.5 using CPL P2.5 (if it was HIGH, it becomes LOW; if it was LOW, it becomes HIGH).
+7. **Decrement outer loop counter (R6):**
+   - If R6 ≠ 0, repeat the outer loop.
+   - If R6 = 0, reload R6 and restart the process.
 8. **After outer loop completes:**
-   - Jump back to HERE to repeat the entire process continuously.
+   - Repeat the entire sequence continuously, ensuring Port 2.5 keeps toggling with the required delay.
 9. **End.**
 
 ## PROGRAM
